@@ -3,6 +3,7 @@ var input = document.querySelector('input');
 var buttonOne = document.querySelector('.playerOne');
 var buttonTwo = document.querySelector('.playerTwo');
 var buttonReset = document.querySelector('.reset');
+var gameOver = false;
 var maxGame = 5;
 maxScoreLabel.textContent = maxGame;
 
@@ -17,6 +18,7 @@ var players = [{
 input.addEventListener('input', function(){
 	maxGame = this.value;
 	maxScoreLabel.textContent = maxGame;
+	reset();
 });
 
 buttonOne.addEventListener('click', function() {
@@ -28,19 +30,25 @@ buttonTwo.addEventListener('click', function() {
 });
 
 buttonReset.addEventListener('click', function() {
-    players.forEach(function(element) {
-        element.score = 0;
-        element.label.textContent = 0;
-        element.label.style.color = 'black';
-    });
+    reset();
 });
 
+function reset() {
+	players.forEach(function(element) {
+        element.score = 0;
+        element.label.textContent = 0;
+        element.label.classList.remove('winner');
+    });
+    gameOver = false;
+}
+
 function addScore(playerIndex) {
-    if (players[0].score < maxGame && players[1].score < maxGame) {
+    if (!gameOver) {
         players[playerIndex].score += 1;
         players[playerIndex].label.textContent = players[playerIndex].score;
     }
     if (players[playerIndex].score >= maxGame) {
-        players[playerIndex].label.style.color = 'green';
+        players[playerIndex].label.classList.add('winner');
+        gameOver = true;
     }
 }
